@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -13,6 +13,7 @@ import {
 import { FRONTEND_ENDPOINTS } from "config/constants";
 import { login } from "context/userSlice";
 import { useAppDispatch, useAppSelector } from "hooks/reduxDispatchAndSelector";
+import { tasksAPI } from "API/tasksAPI";
 
 const SuccessRegister = styled(Error)`
   color: green;
@@ -50,6 +51,19 @@ export const Login = () => {
       .then(() => navigate(FRONTEND_ENDPOINTS.HOME))
       .catch(() => {}); //pevitar uncaught in promise en el browser log
   }
+
+  useEffect(() => {
+    tasksAPI
+      .TEST()
+      .then(({ data }) => {
+        alert(data);
+      })
+      .catch((err) => {
+        console.log(error);
+        alert("ERROR: " + JSON.stringify(err?.message));
+      });
+  }, []);
+
   return (
     <Container>
       <Form onSubmit={handleLogin}>

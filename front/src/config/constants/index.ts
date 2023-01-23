@@ -22,7 +22,7 @@ export const BACKEND_URL = new URL_BACK_ENDPOINTS();
 
 export const BACKEND_ROOT =
   !process.env.NODE_ENV || process.env.NODE_ENV === "development"
-    ? "http://localhost:5000/api/v1"
-    : "https://typescript-backend-reactnode.herokuapp.com/api/v1";
+    ? `http://localhost:5000${BACKEND_URL.ROOT}`
+    : `https://typescript-backend-reactnode.herokuapp.com${BACKEND_URL.ROOT}`;
 
 export const LSTORAGE_KEY = "user";

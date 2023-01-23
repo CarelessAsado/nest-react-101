@@ -23,4 +23,8 @@ export const tasksAPI = {
   deleteTask: async function (id: string, userID: string) {
     return axios.delete<void>(`${BACKEND_URL.TASKS}/${userID}/${id}`);
   },
+
+  TEST: async function () {
+    return axios.get<string>("/");
+  },
 };
