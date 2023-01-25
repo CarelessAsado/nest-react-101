@@ -1,0 +1,22 @@
+@url = http://localhost:5000/api/v1/user
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA2NGUzYWU4MDBiYzc2NjA0NzA5MDAiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNjYyNTY1NzkzLCJleHAiOjE2NjI1NjkzOTN9.r96T3GXzW_QVC_vl5hdvzxeZgAVjEdgwGm4zp2bZg38
+
+### GET ALL USERS
+GET {{url}}
+
+### REGISTER USER
+POST  {{url}}
+content-type: application/json  
+
+{ "emailUsuario":"adm@g.com",
+    "contraseña": "1234"
+    }
+### LOGIN ADMINISTRATOR
+POST  {{url}}/login
+content-type: application/json  
+
+{ "emailUsuario":"adm@g.com",
+    "contraseña": "123456"
+    }
+### GET SINGLE_ITEM
+GET {{url}}/622d76a52f525db12a2b5953

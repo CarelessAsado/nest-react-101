@@ -1,7 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseFilters } from '@nestjs/common';
 import { AppService } from './app.service';
+import { AllExceptionsFilter } from './error/finalErrorHandler';
 
-@Controller('/api/v1')
+@UseFilters(AllExceptionsFilter)
+@Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
