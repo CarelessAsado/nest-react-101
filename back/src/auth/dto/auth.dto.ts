@@ -1,6 +1,9 @@
-import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
+import { PickType } from '@nestjs/mapped-types';
 
 export class RegisterInputDTO implements RegisterInputType {
+  @IsOptional()
+  @IsString()
   name: string;
 
   @IsNotEmpty()
@@ -10,11 +13,7 @@ export class RegisterInputDTO implements RegisterInputType {
   @IsEmail()
   email: string;
 }
-export class LoginInputDTO implements LoginInputType {
-  @IsNotEmpty()
-  @IsString()
-  password: string;
 
-  @IsEmail()
-  email: string;
-}
+export class LoginInputDTO
+  extends PickType(RegisterInputDTO, ['password', 'email'])
+  implements LoginInputType {}

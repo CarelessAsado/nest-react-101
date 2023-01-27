@@ -20,9 +20,8 @@ async function bootstrap() {
   /* -------------------VALIDATION PIPE---------------------------- */
   app.useGlobalPipes(
     new ValidationPipe({
+      whitelist: true,
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
-        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        console.log(validationErrors);
         const message = validationErrors
           .map((error) => Object.values(error.constraints as object).join(','))
           .join(', ');

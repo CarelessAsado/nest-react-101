@@ -25,10 +25,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     //el validation error q lanza el pipe de nest no es instanceof del ValidationError de class-validator
     //x otro lado de Nest/common solo importas un type/interface q refleja el ValidationError de class-validator
 
-    if (exception instanceof BadRequestException) {
-    }
-    /*  if (exception instanceof ValidationError) {
-    } */
     const ctx = host.switchToHttp();
 
     const httpStatus =

@@ -23,8 +23,8 @@ content-type: application/json
 POST  {{url}}/login
 content-type: application/json
 
-{ "email":"rodrigohernanlopez89gmail.com",
-    "password": ""
+{ "email":"rodrigohernanlopez89@gmail.com",
+    "password": "12344556ssA@"
     }
 
 ### GET SINGLE_ITEM

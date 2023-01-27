@@ -25,9 +25,6 @@ export class AuthController {
       user,
     );
 
-    if (!user?.name) {
-      throw Error('VALIDATION ERROR');
-    }
     const data = await this.authService.registerUser(user.email, user.password);
     console.log(data);
     return this.userDBService.addUser({
