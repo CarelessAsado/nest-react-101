@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
+import { AuthGuard } from './auth/guard/checkJWT.guard';
 import { AWS_ENV_VARS } from './constants';
-import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -24,6 +25,12 @@ import { UserModule } from './user/user.module';
     UserModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    //https://docs.nestjs.com/guards#binding-guards READ HERE
+    /*   {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    }, */
+  ],
 })
 export class AppModule {}

@@ -1,9 +1,15 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  Inject,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Request } from 'express';
 import * as jwkToPem from 'jwk-to-pem';
 import * as jwt from 'jsonwebtoken';
 import { COGNITO_CONFIG } from 'src/constants';
+import { UserDBService } from 'src/user/userDB.service';
 
 let pems: { [key: string]: any } = {};
 
@@ -12,7 +18,7 @@ export class AuthGuard implements CanActivate {
   private poolRegion: string = COGNITO_CONFIG.REGION;
   private userPoolId: string = COGNITO_CONFIG.POOL_ID;
 
-  constructor() {
+  constructor(/* @Inject(UserDBService) private userDBService: UserDBService */) {
     this.setUp();
   }
 
