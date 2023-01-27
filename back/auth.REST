@@ -22,6 +22,7 @@ content-type: application/json
 ### LOGIN ADMINISTRATOR
 POST  {{url}}/login
 content-type: application/json
+auth:blabla
 
 { "email":"rodrigohernanlopez89@gmail.com",
     "password": "12344556ssA@"
