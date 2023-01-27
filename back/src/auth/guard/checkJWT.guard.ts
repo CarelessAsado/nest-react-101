@@ -27,14 +27,10 @@ export class AuthGuard implements CanActivate {
       return true;
     }
     console.log(request.headers, 333);
-    if (request.headers.auth) {
-      console.log('JWT MAGIC WITH PEM');
-      //decode
-      this.verifyToken(request);
-      //check user and add to Context
-    }
 
-    return true;
+    //decode
+    return this.verifyToken(request);
+    //check user and add to Context
   }
 
   verifyToken(req: Request) {
@@ -42,7 +38,6 @@ export class AuthGuard implements CanActivate {
     console.log(headerToken);
     if (!headerToken) return false;
     //aca hago un decoding light, ver cual es la razon de esto
-    console.log(jwt, 77777777777777777777777);
     let decodedJwt: any = jwt.decode(headerToken, { complete: true });
     if (decodedJwt === null || decodedJwt.payload?.token_use !== 'access') {
       return false;
@@ -55,16 +50,15 @@ export class AuthGuard implements CanActivate {
     if (!pem) {
       return false;
     }
-    jwt.verify(headerToken, pem, function (err: any, payload: any) {
-      if (err) {
-        return false;
-      } else {
-        console.log(payload, 'ver en q se diferencian los ID del access');
-        //Add user to the request object
-        /* req.user = payload.sub; */
-        return true;
-      }
-    });
+    try {
+      const userMaybe = jwt.verify(headerToken, pem);
+      console.log(userMaybe, 'ver en q se diferencian los ID del access');
+      //Add user to the request object
+      /* req.user = payload.sub; */
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   private async setUp() {
@@ -76,7 +70,7 @@ export class AuthGuard implements CanActivate {
         throw 'request not successful';
       }
       const data: any = await response.json();
-      console.log(data);
+
       const { keys } = data;
       for (let i = 0; i < keys.length; i++) {
         const key_id = keys[i].kid;
