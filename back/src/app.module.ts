@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { AWS_ENV_VARS } from './constants';
+import { UserController } from './user/user.controller';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { AWS_ENV_VARS } from './constants';
       },
     }),
     AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],

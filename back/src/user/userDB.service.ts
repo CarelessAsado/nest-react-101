@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 //en mongoose se define el schema en otro lado, o sea schema => service => controller => MODULE
 
 @Injectable()
-export class UserService {
+export class UserDBService {
   users: IUser[] = [
     { name: 'rodi', id: 123, email: '', sub: '123', password: '' },
     {

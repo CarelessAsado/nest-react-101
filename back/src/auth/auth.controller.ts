@@ -3,20 +3,15 @@ import { Get, Post, Body, Res, Req } from '@nestjs/common/decorators';
 import { Request, Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { COOKIE_OPTIONS, COOKIE_RT_KEY } from 'src/constants';
-import { UserService } from '../user/userDB.service';
+import { UserDBService } from '../user/userDB.service';
 import { LoginInputDTO, RegisterInputDTO } from './dto/auth.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    private userDBService: UserService,
+    private userDBService: UserDBService,
     private authService: AuthService,
   ) {}
-
-  @Get()
-  getUsers(): Promise<IUser[]> {
-    return this.userDBService.findAllUsers();
-  }
 
   @Post('register')
   async registerUser(@Body() user: RegisterInputDTO): Promise<IUser> {

@@ -8,6 +8,7 @@ import {
   ValidationError,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from './auth/guard/checkJWT.guard';
 
 const PORT = process.env.PORT || 5000;
 async function bootstrap() {
@@ -30,6 +31,8 @@ async function bootstrap() {
       },
     }),
   );
+  /*-----------------------AUTH CHECKER----------------------------*/
+  app.useGlobalGuards(new AuthGuard());
 
   /* ------------------ERROR HANDLER----------------------------- */
   const httpAdapter = app.get(HttpAdapterHost);
