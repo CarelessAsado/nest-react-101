@@ -7,7 +7,6 @@ import { COGNITO_CONFIG } from 'src/constants';
 
 let pems: { [key: string]: any } = {};
 
-type ContextAuth = Request & { user?: IUser };
 @Injectable()
 export class AuthGuard implements CanActivate {
   private poolRegion: string = COGNITO_CONFIG.REGION;
@@ -29,22 +28,24 @@ export class AuthGuard implements CanActivate {
     }
     console.log(request.headers, 333);
 
-    //decode
+    //decode + check user and add to Context
     return this.verifyToken(request);
-    //check user and add to Context
   }
 
   verifyToken(req: ContextAuth) {
-    const headerToken = req.headers.auth as string;
+    const headerToken = req.headers.auth;
     console.log(headerToken);
-    if (!headerToken) return false;
+    if (!headerToken || typeof headerToken !== 'string') return false;
+
     //aca hago un decoding light, ver cual es la razon de esto
     let decodedJwt: any = jwt.decode(headerToken, { complete: true });
+
     if (decodedJwt === null || decodedJwt.payload?.token_use !== 'access') {
       return false;
     }
 
     console.log(decodedJwt, 'decodedJWT, light decoding');
+
     let kid = decodedJwt.header.kid;
     let pem = pems[kid];
     console.log(pem, 'pem anda a saber q es');
