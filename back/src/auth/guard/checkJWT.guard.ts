@@ -7,6 +7,7 @@ import { COGNITO_CONFIG } from 'src/constants';
 
 let pems: { [key: string]: any } = {};
 
+type ContextAuth = Request & { user?: IUser };
 @Injectable()
 export class AuthGuard implements CanActivate {
   private poolRegion: string = COGNITO_CONFIG.REGION;
@@ -21,7 +22,7 @@ export class AuthGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     console.log('AUTH GUARD', 666);
 
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<ContextAuth>();
     if (/* request.route.path */ request.url.includes('auth')) {
       console.log('we in auth');
       return true;
@@ -33,7 +34,7 @@ export class AuthGuard implements CanActivate {
     //check user and add to Context
   }
 
-  verifyToken(req: Request) {
+  verifyToken(req: ContextAuth) {
     const headerToken = req.headers.auth as string;
     console.log(headerToken);
     if (!headerToken) return false;
@@ -54,7 +55,7 @@ export class AuthGuard implements CanActivate {
       const userMaybe = jwt.verify(headerToken, pem);
       console.log(userMaybe, 'ver en q se diferencian los ID del access');
       //Add user to the request object
-      /* req.user = payload.sub; */
+      req.user = { sub: userMaybe.sub as string } as IUser;
       return true;
     } catch (error) {
       return false;
