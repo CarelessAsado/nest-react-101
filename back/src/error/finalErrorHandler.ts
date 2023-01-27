@@ -4,6 +4,7 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  BadRequestException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 
@@ -18,7 +19,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
     console.log(
       'error handlerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr',
     );
+    console.log(exception, 666);
+    //los validation errors are a BadRequestException
+    console.log(exception instanceof BadRequestException);
+    //el validation error q lanza el pipe de nest no es instanceof del ValidationError de class-validator
+    //x otro lado de Nest/common solo importas un type/interface q refleja el ValidationError de class-validator
 
+    if (exception instanceof BadRequestException) {
+    }
+    /*  if (exception instanceof ValidationError) {
+    } */
     const ctx = host.switchToHttp();
 
     const httpStatus =

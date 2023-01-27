@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { AWS_ENV_VARS } from './constants';
 
 @Module({
   imports: [
@@ -10,14 +9,18 @@ import { UserModule } from './user/user.module';
       isGlobal: true,
       validate: (config) => {
         /* console.log(config); */
-        if (!config.MONGO_URI)
+        const checkAwsVars = Object.keys(AWS_ENV_VARS).some(
+          (i) => !Boolean(config[i]),
+        );
+
+        if (!config.MONGO_URI || checkAwsVars)
           throw new Error('Config variables not properly set');
         return config;
       },
     }),
-    UserModule,
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
