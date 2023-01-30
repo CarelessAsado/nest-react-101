@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/guard/checkJWT.guard';
+import { RolesGuard } from './auth/guard/CheckRoles.guard';
 import { AWS_ENV_VARS } from './constants';
 import { UserModule } from './user/user.module';
 
@@ -27,9 +28,14 @@ import { UserModule } from './user/user.module';
   controllers: [],
   providers: [
     //https://docs.nestjs.com/guards#binding-guards READ HERE
+    //u can chain them,if the 1st fails, it never reaches the 2nd
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

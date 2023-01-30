@@ -8,9 +8,9 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import * as jwkToPem from 'jwk-to-pem';
 import * as jwt from 'jsonwebtoken';
-import { BACKEND_ENDPOINTS, COGNITO_CONFIG } from 'src/constants';
+import { COGNITO_CONFIG } from 'src/constants';
 import { UserDBService } from 'src/user/userDB.service';
-import { IS_PUBLIC_KEY } from './@publicRoute';
+import { checkPublicDecorator } from './utils';
 
 let pems: { [key: string]: any } = {};
 
@@ -32,13 +32,8 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<ContextAuth>();
     console.log('AUTH GUARD in URL: ', request.url);
 
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-
-    console.log(isPublic);
-    if (isPublic) {
+    //it returns the boolean we set on the decorator, if the route is public we avoid decoding jwt
+    if (checkPublicDecorator(this.reflector, context)) {
       return true;
     }
 
@@ -62,7 +57,7 @@ export class AuthGuard implements CanActivate {
 
     let kid = decodedJwt.header.kid;
     let pem = pems[kid];
-    console.log(pem, 'pem anda a saber q es');
+
     if (!pem) {
       return false;
     }
@@ -70,7 +65,7 @@ export class AuthGuard implements CanActivate {
       const awsPayload = jwt.verify(headerToken, pem);
 
       //Add user to the request object
-      if (awsPayload.sub !== 'string') {
+      if (typeof awsPayload?.sub !== 'string') {
         throw Error('Sub is not a string');
       }
       const user = await this.userDBService.findUserByAWSSub(awsPayload.sub);

@@ -9,8 +9,10 @@ import {
 } from 'src/constants';
 import { UserDBService } from '../user/userDB.service';
 import { LoginInputDTO, RegisterInputDTO } from './dto/auth.dto';
+import { PublicRoute } from 'src/auth/guard/@publicRoute';
 
 @Controller(BACKEND_ENDPOINTS.AUTH)
+@PublicRoute()
 export class AuthController {
   constructor(
     private userDBService: UserDBService,
