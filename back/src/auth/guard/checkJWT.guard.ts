@@ -5,7 +5,6 @@ import {
   Inject,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { Request } from 'express';
 import * as jwkToPem from 'jwk-to-pem';
 import * as jwt from 'jsonwebtoken';
 import { COGNITO_CONFIG } from 'src/constants';
