@@ -16,11 +16,12 @@ export const COOKIE_OPTIONS: CookieOptions = {
 class URL_BACK_ENDPOINTS {
   ROOT = '/api/v1';
   PREGUNTAS = `${this.ROOT}/preguntas`;
-  AUTH = '/users/auth';
-  LOGIN = `${this.AUTH}/login`;
-  REGISTER = `${this.AUTH}/register`;
-  REFRESH = `${this.AUTH}/refresh`;
-  LOGOUT = `${this.AUTH}/logout`;
+  AUTH = '/auth';
+  USER = '/user';
+  LOGIN = `/login`;
+  REGISTER = `/register`;
+  REFRESH = `/refresh`;
+  LOGOUT = `/logout`;
 }
 export const BACKEND_ENDPOINTS = new URL_BACK_ENDPOINTS();
 

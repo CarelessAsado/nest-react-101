@@ -2,11 +2,15 @@ import { Controller } from '@nestjs/common';
 import { Get, Post, Body, Res, Req } from '@nestjs/common/decorators';
 import { Request, Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
-import { COOKIE_OPTIONS, COOKIE_RT_KEY } from 'src/constants';
+import {
+  BACKEND_ENDPOINTS,
+  COOKIE_OPTIONS,
+  COOKIE_RT_KEY,
+} from 'src/constants';
 import { UserDBService } from '../user/userDB.service';
 import { LoginInputDTO, RegisterInputDTO } from './dto/auth.dto';
 
-@Controller('auth')
+@Controller(BACKEND_ENDPOINTS.AUTH)
 export class AuthController {
   constructor(
     private userDBService: UserDBService,

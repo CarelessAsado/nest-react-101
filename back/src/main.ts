@@ -32,8 +32,8 @@ async function bootstrap() {
     }),
   );
   /*-----------------------AUTH CHECKER----------------------------*/
-  /* app.useGlobalGuards(new AuthGuard()); */
 
+  /*  app.useGlobalGuards(new AuthGuard());  */
   /* ------------------ERROR HANDLER----------------------------- */
   const httpAdapter = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));

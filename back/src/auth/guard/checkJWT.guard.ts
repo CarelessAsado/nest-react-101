@@ -4,11 +4,13 @@ import {
   ExecutionContext,
   Inject,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import * as jwkToPem from 'jwk-to-pem';
 import * as jwt from 'jsonwebtoken';
-import { COGNITO_CONFIG } from 'src/constants';
+import { BACKEND_ENDPOINTS, COGNITO_CONFIG } from 'src/constants';
 import { UserDBService } from 'src/user/userDB.service';
+import { IS_PUBLIC_KEY } from './@publicRoute';
 
 let pems: { [key: string]: any } = {};
 
@@ -17,21 +19,28 @@ export class AuthGuard implements CanActivate {
   private poolRegion: string = COGNITO_CONFIG.REGION;
   private userPoolId: string = COGNITO_CONFIG.POOL_ID;
 
-  constructor(@Inject(UserDBService) private userDBService: UserDBService) {
+  constructor(
+    @Inject(UserDBService) private userDBService: UserDBService,
+    private reflector: Reflector,
+  ) {
     this.setUp();
   }
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('AUTH GUARD', 666);
-
     const request = context.switchToHttp().getRequest<ContextAuth>();
-    if (/* request.route.path */ request.url.includes('auth')) {
-      console.log('we in auth');
+    console.log('AUTH GUARD in URL: ', request.url);
+
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    console.log(isPublic);
+    if (isPublic) {
       return true;
     }
-    console.log(request.headers, 333);
 
     //decode + check user and add to Context
     return this.verifyToken(request);
@@ -58,18 +67,21 @@ export class AuthGuard implements CanActivate {
       return false;
     }
     try {
-      const userMaybe = jwt.verify(headerToken, pem);
-      /* console.log(userMaybe, 'ver en q se diferencian los ID del access'); */
+      const awsPayload = jwt.verify(headerToken, pem);
+
       //Add user to the request object
-      const user = await this.userDBService.findUserByAWSSub(
-        userMaybe.sub as string,
-      );
+      if (awsPayload.sub !== 'string') {
+        throw Error('Sub is not a string');
+      }
+      const user = await this.userDBService.findUserByAWSSub(awsPayload.sub);
+
       if (!user) {
         throw Error();
       }
       req.user = user;
       return true;
     } catch (error) {
+      console.log(error?.message);
       return false;
     }
   }
