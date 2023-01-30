@@ -27,4 +27,8 @@ export class UserDBService {
   findUserByMail = async (email: string) => {
     return Promise.resolve(this.users.find((user) => user.email === email));
   };
+
+  findUserByAWSSub = async (sub: string) => {
+    return Promise.resolve(this.users.find((user) => user.sub === sub));
+  };
 }

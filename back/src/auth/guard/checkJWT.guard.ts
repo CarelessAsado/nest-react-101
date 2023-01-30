@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
   private poolRegion: string = COGNITO_CONFIG.REGION;
   private userPoolId: string = COGNITO_CONFIG.POOL_ID;
 
-  constructor(/* @Inject(UserDBService) private userDBService: UserDBService */) {
+  constructor(@Inject(UserDBService) private userDBService: UserDBService) {
     this.setUp();
   }
 
@@ -38,7 +38,7 @@ export class AuthGuard implements CanActivate {
     return this.verifyToken(request);
   }
 
-  verifyToken(req: ContextAuth) {
+  async verifyToken(req: ContextAuth) {
     const headerToken = req.headers.auth;
     console.log(headerToken);
     if (!headerToken || typeof headerToken !== 'string') return false;
@@ -60,9 +60,15 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const userMaybe = jwt.verify(headerToken, pem);
-      console.log(userMaybe, 'ver en q se diferencian los ID del access');
+      /* console.log(userMaybe, 'ver en q se diferencian los ID del access'); */
       //Add user to the request object
-      req.user = { sub: userMaybe.sub as string } as IUser;
+      const user = await this.userDBService.findUserByAWSSub(
+        userMaybe.sub as string,
+      );
+      if (!user) {
+        throw Error();
+      }
+      req.user = user;
       return true;
     } catch (error) {
       return false;

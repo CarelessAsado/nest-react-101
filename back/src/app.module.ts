@@ -27,10 +27,10 @@ import { UserModule } from './user/user.module';
   controllers: [],
   providers: [
     //https://docs.nestjs.com/guards#binding-guards READ HERE
-    /*   {
+    {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    }, */
+    },
   ],
 })
 export class AppModule {}
